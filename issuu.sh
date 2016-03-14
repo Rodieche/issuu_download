@@ -1,14 +1,29 @@
 #!/bin/bash
-echo "Cuantas paginas contiene el comic? : "
-read num
-echo "Ahora ingrese el codigo del URL : "
-read code
 
-#160309141815-9126d0ee4936850f0f70c6535ce4b705
+function download {
 
-i=1
-while [ $i -lt $num ]; do
-	c="https://image.issuu.com/${code}/jpg/page_${i}.jpg"
-	wget $c
-	let i=i+1
-done
+	echo 'Cuantas paginas contiene el comic? : '
+	read num
+	echo "Ahora ingrese el codigo del URL : "
+	read code
+	i=1
+	while [ $i -le $num ]; do
+		c="http://image.issuu.com/${code}/jpg/page_${i}.jpg"
+		wget $c
+		let i=i+1
+	done
+}
+
+function move {
+
+	echo "Moviendo archivos...por favor espere"
+	sleep 1
+	mkdir $1
+	mv *.jpg $1
+	echo "Archivos movidos exitosamente"
+}
+
+echo "Ingrese el nombre del comic: "
+read name
+download
+move $name
