@@ -53,10 +53,12 @@ function delete_page {								# DELETE THE TMP FILE THAT HAVE THE SOURCE CODE
 
 function find_in_source_code {							# PERMIT TO FIND THE LINK WHERE ARE THE PAGES
 
-	line = grep -n ".jpg" page_tmp.rge	
-	for i in $line; do
-		echo $i	
-	done
+	local i=0
+	grep -r "https://image.issuu.com" page_tmp.rge >> link.rge
+	frase=($(sed -n '1p' link.txt))					#obtengo la primera linea que es con
+									#la que voy a trabajar para poder descargar
+
+
 }
 
 get_data
