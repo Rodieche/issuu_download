@@ -1,12 +1,22 @@
 #!/bin/bash
 
-function download {
-
+function get_data {							# OBTENGO LOS DATOS DEL ARCHIVO A DESCARGAR
+	echo "Ingrese el nombre del comic (sin espacios, use guiones bajos en todo caso): "
+	read name
 	echo 'Cuantas paginas contiene el comic? : '
 	read num
-	echo "Ahora ingrese el codigo del URL : "
+	echo "Ahora ingrese la URL del comic : "
 	read code
-	i=1
+}
+
+function get_source_code {						# GET THE SOURCE CODE FROM THE WEB SITE
+	
+	curl -# $code >> page_tmp.rge
+}
+
+function get_images {							# DOWNLOAD DE IMAGES FROM THE WEB PAGE
+
+	local i=1
 	while [ $i -le $num ]; do
 		if [ $i -lt 10 ]; then
 			c="http://image.issuu.com/${code}/jpg/page_${i}.jpg"
@@ -20,26 +30,48 @@ function download {
 	done
 }
 
-function move {
+function move_images {								# MOVE THE IMAGES TO CREATE THE CBZ FILE
 
 	echo "Moviendo archivos...por favor espere"
 	sleep 1
-	mkdir $1
-	mv *.jpg $1
+	mkdir $name
+	mv *.jpg $name
 	echo "Archivos movidos exitosamente"
 }
 
-function make_cbz {
+function make_cbz {								 # MAKE THE CBZ FILE
 
-	zip "${1}.cbz" *.jpg
+	zip "${name}.cbz" *.jpg
 	rm *.jpg
 }
 
-echo "Ingrese el nombre del comic (sin espacios, use guiones bajos en todo caso): "
-read name
-download
-move $name
-cd $name
-make_cbz $name
-cd ..
+function delete_page {								# DELETE THE TMP FILE THAT HAVE THE SOURCE CODE
+
+	rm page_tmp.rge
+
+}
+
+function find_in_source_code {							# PERMIT TO FIND THE LINK WHERE ARE THE PAGES
+
+	line = grep -n ".jpg" page_tmp.rge	
+	for i in $line; do
+		echo $i	
+	done
+}
+
+get_data
+get_source_code
+find_in_source_code
+#get_images
+#move_images
+#make_cbz
+#delete_page
+
+
+
+#download
+#move $name
+#cd $name
+#make_cbz $name
+#cd ..
 
