@@ -62,11 +62,11 @@ function find_in_source_code {							# PERMIT TO FIND THE LINK WHERE ARE THE PAG
 }
 
 get_data
-get_source_code
-find_in_source_code
-#get_images
-#move_images
-#make_cbz
+#get_source_code
+#find_in_source_code
+get_images
+move_images
+make_cbz
 #delete_page
 
 
